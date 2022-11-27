@@ -7,7 +7,8 @@ public class MarkdownParser
     private const string TemplateTitleTag = @"<h{0}>{1}</h{0}>";
     private readonly StringBuilder _html = new();
     private readonly string _markdownString;
-    private bool _ulOpen;
+    private bool _ulOpen = false;
+    private bool _backtick = false;
 
     public MarkdownParser(string markdownString)
     {
@@ -35,6 +36,27 @@ public class MarkdownParser
                     _ulOpen = true;
                 }
                 _html.Append(StarToHtmlList(line));
+            }
+            else if (line.StartsWith("```"))
+            {
+                if (_backtick)
+                {
+                    _backtick = false;
+                    _html.Append("</code>");
+                    continue;
+                }
+                _backtick = true;
+                _html.Append("<code>");
+            }
+            else if (line.StartsWith("`"))
+            {
+                _html.Append("<code>");
+                _html.Append(string.Join("",line.Skip(1).SkipLast(1)));
+                _html.Append("</code>");
+            }
+            else if (_backtick)
+            {
+                _html.Append(line);
             }
         }
         if (_ulOpen)

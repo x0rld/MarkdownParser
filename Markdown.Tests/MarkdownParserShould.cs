@@ -5,11 +5,18 @@ public class MarkdownParserShould
     [Fact]
     public void AcceptanceTest()
     {
-        var actual = new MarkdownParser("""
+        var actual = new MarkdownParser(
+            """
         # title1
         * list
         * list
         ##### title5
+        [lien google](https://google.com)
+        ![alt text for image png](https://en.wikipedia.org/wiki/File:PNG_transparency_demonstration_1.png)
+         ```
+        Console.WriteLine("ok");
+        ``` 
+        `Console.WriteLine("ok");`
         """
         ).Parse();
         var expected = """
@@ -19,6 +26,14 @@ public class MarkdownParserShould
             <li>list</li>
         </ul>  
         <h5>title5</h5>
+        <img src="https://en.wikipedia.org/wiki/File:PNG_transparency_demonstration_1.png" 
+        alt="alt text for image png">
+         <code> 
+        Console.WriteLine("ok");
+        </code>
+         <code> 
+        Console.WriteLine("ok");
+        </code>
         """;
         Check.That(actual).EqualIgnoringWhiteSpace(expected);
     }
