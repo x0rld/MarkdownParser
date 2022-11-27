@@ -11,8 +11,28 @@ public class MarkdownParserShould
     [InlineData("#### Test h4","<h4>Test h4</h4>")]
     [InlineData("##### Test h5","<h5>Test h5</h5>")]
     [InlineData("###### Test h6","<h6>Test h6</h6>")]
-    public void Up_to_six_sharp_return_string_with_tag_h_with_sharp_number(string actual,string expected)
+    public void Return_string_with_tag_h_with_sharp_number(string actual,string expected)
     {
         Check.That(MarkdownParser.Parse(actual)).Equals(expected);
+    }
+
+    [Fact]
+    public void Throw_a_format_exception_when_more_than_6_sharp()
+    {
+        
+        Check.ThatCode(() => MarkdownParser.Parse("#######")).Throws<FormatException>();
+    }
+
+    [Fact]
+    public void Return_html_list_with_element_star_numbers()
+    {
+        Check.That(MarkdownParser.Parse("""
+        * list
+        """).Equals(
+                """
+            <ul>
+                <li>list</li>
+            <ul>
+            """));
     }
 }

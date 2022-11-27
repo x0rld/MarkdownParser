@@ -1,4 +1,6 @@
-﻿namespace Markdown;
+﻿using System.Text;
+
+namespace Markdown;
 
 public class MarkdownParser
 {
@@ -7,7 +9,23 @@ public class MarkdownParser
     public static string Parse(string markdownString)
     {
         var htmlTitle = SharpToHtmlTitle(markdownString);
-        return htmlTitle;
+        var htmlList = StarToHtmlList(htmlTitle);
+        return htmlList;
+    }
+
+    private static string StarToHtmlList(string toParse)
+    {
+        if (toParse.All(ch => ch != '*'))
+        {
+            return toParse;
+        }
+        var builder = new StringBuilder();
+        builder.Append("<ul>");
+        builder.Append("<li>");
+        builder.Append(toParse.Split('*').Last());
+        builder.Append("</li>");
+        builder.Append("</ul>");
+        return builder.ToString();
     }
 
     private static string SharpToHtmlTitle(string markdownString)
@@ -20,12 +38,13 @@ public class MarkdownParser
             4 => string.Format(TemplateTitleTag,"4"),
             5 => string.Format(TemplateTitleTag,"5"),
             6 => string.Format(TemplateTitleTag,"6"),
-            _ => throw new ArgumentException(markdownString)
+            0 => markdownString,
+            _ => throw new FormatException("<h> can go only up to 6")
         };
     }
 
     private static int CountSharpChar(string markdownString)
     {
-        return markdownString.Count(str => str == '#');
+        return markdownString.Count(ch => ch == '#');
     }
 }
