@@ -26,13 +26,14 @@ public class MarkdownParserShould
     [Fact]
     public void Return_html_list_with_element_star_numbers()
     {
-        Check.That(MarkdownParser.Parse("""
+        var actual = MarkdownParser.Parse("""
         * list
-        """).Equals(
-                """
+        """);
+        var expected = """
             <ul>
                 <li>list</li>
-            <ul>
-            """));
+            </ul>
+            """;
+        Check.That(actual).EqualIgnoringWhiteSpace(expected);
     }
 }

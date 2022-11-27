@@ -22,7 +22,7 @@ public class MarkdownParser
         var builder = new StringBuilder();
         builder.Append("<ul>");
         builder.Append("<li>");
-        builder.Append(toParse.Split('*').Last());
+        builder.Append(toParse.Split('*').Last().Trim());
         builder.Append("</li>");
         builder.Append("</ul>");
         return builder.ToString();
