@@ -71,4 +71,35 @@ public class MarkdownParserShould
             """;
         Check.That(actual).EqualIgnoringWhiteSpace(expected);
     }
+
+    [Fact]
+    public void Return_code_tag_with_source_from_triple_backtick()
+    {
+        var actual = new MarkdownParser("""
+        ```
+        Console.WriteLine("ok");
+        ```
+        """).Parse();
+        var expected = """
+            <code> 
+            Console.WriteLine("ok");
+            </code>
+            """;
+        Check.That(actual).EqualIgnoringWhiteSpace(expected);
+    }
+    
+    [Fact]
+    public void Return_code_tag_with_source_from_backtick()
+    {
+        var actual = new MarkdownParser("""
+        `Console.WriteLine("ok");`
+        """).Parse();
+        var expected = """
+            <code> 
+            Console.WriteLine("ok");
+            </code>
+            """;
+        Check.That(actual).EqualIgnoringWhiteSpace(expected);
+    }
+    
 }
