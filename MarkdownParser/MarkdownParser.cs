@@ -47,11 +47,6 @@ public class MarkdownParser
 
     private string StarToHtmlList(string toParse)
     {
-        if (toParse.All(ch => ch != '*'))
-        {
-            return toParse;
-        }
-
         var builder = new StringBuilder();
         foreach (var element in toParse.Split('*').Skip(1))
         {
@@ -62,10 +57,10 @@ public class MarkdownParser
         return builder.ToString();
     }
 
-    private  string SharpToHtmlTitle(string markdownString)
+    private  string SharpToHtmlTitle(string toParse)
     {
-        var content = string.Join("",markdownString.Skip(CountSharpChar(markdownString)).ToList()).Trim();
-        return CountSharpChar(markdownString) switch
+        var content = string.Join("",toParse.Skip(CountSharpChar(toParse)).ToList()).Trim();
+        return CountSharpChar(toParse) switch
         {
             1 => string.Format(TemplateTitleTag, "1",content),
             2 => string.Format(TemplateTitleTag, "2",content),
@@ -73,7 +68,6 @@ public class MarkdownParser
             4 => string.Format(TemplateTitleTag, "4",content),
             5 => string.Format(TemplateTitleTag, "5",content),
             6 => string.Format(TemplateTitleTag, "6",content),
-            0 => markdownString,
             _ => throw new FormatException("<h> can go only up to 6")
         };
     }
