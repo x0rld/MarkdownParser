@@ -4,16 +4,48 @@ namespace Markdown;
 
 public class MarkdownParser
 {
-    private const string TemplateTitleTag = @"<h{0}>Test h{0}</h{0}>";
+    private const string TemplateTitleTag = @"<h{0}>{1}</h{0}>";
+    private readonly StringBuilder _html = new();
+    private readonly string _markdownString;
+    private bool _ulOpen;
 
-    public static string Parse(string markdownString)
+    public MarkdownParser(string markdownString)
     {
-        var htmlTitle = SharpToHtmlTitle(markdownString);
-        var htmlList = StarToHtmlList(htmlTitle);
-        return htmlList;
+        _markdownString = markdownString;
     }
 
-    private static string StarToHtmlList(string toParse)
+    public string Parse()
+    {
+        foreach (var line in _markdownString.Split(Environment.NewLine))
+        {
+            if (line.StartsWith('#'))
+            {
+                if (_ulOpen)
+                {
+                    _html.Append("</ul>");
+                    _ulOpen = false;
+                }
+                _html.Append(SharpToHtmlTitle(line));
+            }
+            else if (line.StartsWith('*'))
+            {
+                if (_ulOpen == false)
+                {
+                    _html.Append("<ul>");
+                    _ulOpen = true;
+                }
+                _html.Append(StarToHtmlList(line));
+            }
+        }
+        if (_ulOpen)
+        {
+            _html.Append("</ul>");
+            _ulOpen = false;
+        }
+        return _html.ToString();
+    }
+
+    private string StarToHtmlList(string toParse)
     {
         if (toParse.All(ch => ch != '*'))
         {
@@ -21,33 +53,32 @@ public class MarkdownParser
         }
 
         var builder = new StringBuilder();
-        builder.Append("<ul>");
         foreach (var element in toParse.Split('*').Skip(1))
         {
             builder.Append("<li>");
             builder.Append(element.Trim());
             builder.Append("</li>");
         }
-        builder.Append("</ul>");
         return builder.ToString();
     }
 
-    private static string SharpToHtmlTitle(string markdownString)
+    private  string SharpToHtmlTitle(string markdownString)
     {
+        var content = string.Join("",markdownString.Skip(CountSharpChar(markdownString)).ToList()).Trim();
         return CountSharpChar(markdownString) switch
         {
-            1 => string.Format(TemplateTitleTag, "1"),
-            2 => string.Format(TemplateTitleTag, "2"),
-            3 => string.Format(TemplateTitleTag, "3"),
-            4 => string.Format(TemplateTitleTag, "4"),
-            5 => string.Format(TemplateTitleTag, "5"),
-            6 => string.Format(TemplateTitleTag, "6"),
+            1 => string.Format(TemplateTitleTag, "1",content),
+            2 => string.Format(TemplateTitleTag, "2",content),
+            3 => string.Format(TemplateTitleTag, "3",content),
+            4 => string.Format(TemplateTitleTag, "4",content),
+            5 => string.Format(TemplateTitleTag, "5",content),
+            6 => string.Format(TemplateTitleTag, "6",content),
             0 => markdownString,
             _ => throw new FormatException("<h> can go only up to 6")
         };
     }
 
-    private static int CountSharpChar(string markdownString)
+    private  int CountSharpChar(string markdownString)
     {
         return markdownString.Count(ch => ch == '#');
     }
