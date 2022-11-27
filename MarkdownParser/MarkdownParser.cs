@@ -19,11 +19,15 @@ public class MarkdownParser
         {
             return toParse;
         }
+
         var builder = new StringBuilder();
         builder.Append("<ul>");
-        builder.Append("<li>");
-        builder.Append(toParse.Split('*').Last().Trim());
-        builder.Append("</li>");
+        foreach (var element in toParse.Split('*').Skip(1))
+        {
+            builder.Append("<li>");
+            builder.Append(element.Trim());
+            builder.Append("</li>");
+        }
         builder.Append("</ul>");
         return builder.ToString();
     }
@@ -32,12 +36,12 @@ public class MarkdownParser
     {
         return CountSharpChar(markdownString) switch
         {
-            1 => string.Format(TemplateTitleTag,"1"),
-            2 => string.Format(TemplateTitleTag,"2"),
-            3 => string.Format(TemplateTitleTag,"3"),
-            4 => string.Format(TemplateTitleTag,"4"),
-            5 => string.Format(TemplateTitleTag,"5"),
-            6 => string.Format(TemplateTitleTag,"6"),
+            1 => string.Format(TemplateTitleTag, "1"),
+            2 => string.Format(TemplateTitleTag, "2"),
+            3 => string.Format(TemplateTitleTag, "3"),
+            4 => string.Format(TemplateTitleTag, "4"),
+            5 => string.Format(TemplateTitleTag, "5"),
+            6 => string.Format(TemplateTitleTag, "6"),
             0 => markdownString,
             _ => throw new FormatException("<h> can go only up to 6")
         };
