@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markdown", "Markdown\Markdown.csproj", "{8342CDB2-8CBC-4429-9C53-A1D8031FC064}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkdownTest", "MarkdownTest\MarkdownTest.csproj", "{12F07FE5-25F1-4F9C-89D5-4082640DEDC0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markdown.Tests", "Markdown.Tests\Markdown.Tests.csproj", "{12F07FE5-25F1-4F9C-89D5-4082640DEDC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

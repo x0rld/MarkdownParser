@@ -1,6 +1,4 @@
-using Markdown;
-
-namespace MarkdownTest;
+namespace Markdown.Tests;
 
 public class MarkdownParserShould
 {

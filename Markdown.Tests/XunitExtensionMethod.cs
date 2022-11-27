@@ -1,4 +1,4 @@
-﻿namespace MarkdownTest;
+﻿namespace Markdown.Tests;
 
 public static class XunitExtensionMethod
 {
