@@ -19,7 +19,11 @@ public class MarkdownParser
     {
         foreach (var line in _markdownString.Split(Environment.NewLine))
         {
-            if (line.StartsWith('#'))
+            if (line.StartsWith("["))
+            {
+                _html.Append(MarkdownLinkToHtml(line));
+            }
+            else if (line.StartsWith('#'))
             {
                 if (_ulOpen)
                 {
@@ -65,6 +69,14 @@ public class MarkdownParser
             _ulOpen = false;
         }
         return _html.ToString();
+    }
+
+    private string MarkdownLinkToHtml(string toParse)
+    {
+        var splitString = toParse.Split(']');
+        var name = splitString.First()[1..];
+        var link = splitString.Last()[1..(splitString.Last().Length -1)];
+        return $"<a href=\"{link}\">{name}</a>";
     }
 
     private string StarToHtmlList(string toParse)

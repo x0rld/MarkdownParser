@@ -12,7 +12,7 @@ public class MarkdownParserShould
         * list
         ##### title5
         [lien google](https://google.com)
-        ![alt text for image png](https://en.wikipedia.org/wiki/File:PNG_transparency_demonstration_1.png)
+        ![alt-text-for-image-png](https://en.wikipedia.org/wiki/File:PNG_transparency_demonstration_1.png)
          ```
         Console.WriteLine("ok");
         ``` 
@@ -27,7 +27,7 @@ public class MarkdownParserShould
         </ul>  
         <h5>title5</h5>
         <img src="https://en.wikipedia.org/wiki/File:PNG_transparency_demonstration_1.png" 
-        alt="alt text for image png">
+        alt="alt-text-for-image-png">
          <code> 
         Console.WriteLine("ok");
         </code>
@@ -101,5 +101,18 @@ public class MarkdownParserShould
             """;
         Check.That(actual).EqualIgnoringWhiteSpace(expected);
     }
-    
+
+    [Fact]
+    public void Return_a_tag_with_content_from_markdown_link_tag()
+    {
+        string actual =
+            new MarkdownParser("""
+            [markdown-github](https://github.github.com/gfm/)
+            """).Parse();
+        string expected =
+            """
+            <a href="https://github.github.com/gfm/">markdown-github</a>
+            """;
+        Check.That(actual).Equals(expected);
+    }
 }
